@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            max-width: 600px;
+            max-width: 650px;
             margin: 50px auto;
             padding: 20px;
             background: #f5f5f5;
@@ -18,8 +18,10 @@
             padding: 30px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             text-align: center;
+            margin-bottom: 20px;
         }
         h1 { margin: 0 0 10px; color: #333; }
+        h2 { color: #333; margin: 20px 0 15px; font-size: 1.2em; }
         p { color: #666; line-height: 1.6; }
         .artwork {
             width: 200px;
@@ -53,7 +55,39 @@
             padding: 2px 6px;
             border-radius: 4px;
             font-size: 14px;
+            word-break: break-all;
         }
+        .episodes {
+            background: white;
+            border-radius: 12px;
+            padding: 20px 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: left;
+        }
+        .episode {
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .episode:last-child { border-bottom: none; }
+        .episode-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        .episode-meta {
+            font-size: 14px;
+            color: #888;
+        }
+        .episode audio {
+            width: 100%;
+            margin-top: 10px;
+        }
+        .howto {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+        .howto strong { color: #333; }
     </style>
 </head>
 <body>
@@ -63,13 +97,70 @@
         <p>Your AI-powered morning briefing covering markets, tech, and news. Fresh every morning at 7 AM ET.</p>
         
         <div class="subscribe">
-            <a href="https://podcasts.apple.com/podcast/id__PODCAST_ID__" target="_blank">Apple Podcasts</a>
+            <a href="podcast://larrywcl.github.io/daily-briefing/feed.xml">Apple Podcasts</a>
             <a href="feed.xml" class="rss">RSS Feed</a>
         </div>
         
-        <p style="margin-top: 30px; font-size: 14px;">
-            RSS: <code>https://larrywcl.github.io/daily-briefing/feed.xml</code>
-        </p>
+        <div class="howto">
+            <strong>To subscribe manually:</strong><br>
+            Copy this RSS URL into your podcast app:<br>
+            <code>https://larrywcl.github.io/daily-briefing/feed.xml</code>
+        </div>
     </div>
+
+    <div class="episodes">
+        <h2>Recent Episodes</h2>
+        <div id="episode-list">
+            <!-- Episodes loaded dynamically -->
+            <p style="color: #888; text-align: center;">Loading episodes...</p>
+        </div>
+    </div>
+
+    <script>
+        // Parse RSS and display episodes
+        fetch('feed.xml')
+            .then(r => r.text())
+            .then(xml => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(xml, 'text/xml');
+                const items = doc.querySelectorAll('item');
+                const container = document.getElementById('episode-list');
+                
+                if (items.length === 0) {
+                    container.innerHTML = '<p style="color: #888; text-align: center;">No episodes yet. Check back soon!</p>';
+                    return;
+                }
+                
+                let html = '';
+                items.forEach(item => {
+                    const title = item.querySelector('title')?.textContent || 'Untitled';
+                    const pubDate = item.querySelector('pubDate')?.textContent || '';
+                    const description = item.querySelector('description')?.textContent || '';
+                    const enclosure = item.querySelector('enclosure');
+                    const audioUrl = enclosure?.getAttribute('url') || '';
+                    
+                    // Format date
+                    const date = pubDate ? new Date(pubDate).toLocaleDateString('en-US', {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    }) : '';
+                    
+                    html += `
+                        <div class="episode">
+                            <div class="episode-title">${title}</div>
+                            <div class="episode-meta">${date}</div>
+                            ${audioUrl ? `<audio controls preload="none"><source src="${audioUrl}" type="audio/mpeg"></audio>` : ''}
+                        </div>
+                    `;
+                });
+                container.innerHTML = html;
+            })
+            .catch(err => {
+                document.getElementById('episode-list').innerHTML = 
+                    '<p style="color: #888; text-align: center;">Unable to load episodes.</p>';
+            });
+    </script>
 </body>
 </html>
