@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" 
+     xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd"
+     xmlns:content="http://purl.org/rss/1.0/modules/content/"
+     xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>West Creek Daily Briefing</title>
+    <link>https://larrywcl.github.io/daily-briefing/</link>
+    <language>en-us</language>
+    <copyright>© 2025 West Creek Labs</copyright>
+    <description>Your daily morning briefing covering markets, tech, and news. AI-generated podcast delivered fresh every morning.</description>
+    <atom:link href="https://larrywcl.github.io/daily-briefing/feed.xml" rel="self" type="application/rss+xml"/>
+    
+    <!-- iTunes/Apple Podcasts tags -->
+    <itunes:author>West Creek Labs</itunes:author>
+    <itunes:summary>Your daily morning briefing covering markets, tech, and news. AI-generated podcast delivered fresh every morning.</itunes:summary>
+    <itunes:type>episodic</itunes:type>
+    <itunes:owner>
+      <itunes:name>Larry West</itunes:name>
+      <itunes:email>larry@westcreeklabs.com</itunes:email>
+    </itunes:owner>
+    <itunes:explicit>false</itunes:explicit>
+    <itunes:category text="News">
+      <itunes:category text="Daily News"/>
+    </itunes:category>
+    <itunes:image href="https://larrywcl.github.io/daily-briefing/artwork.jpg"/>
+    
+    <!-- Episodes will be added here -->
+    <!-- EPISODES_MARKER -->
+    
+  </channel>
+</rss>
